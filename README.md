@@ -2,4 +2,4 @@
 
 # Mojave
 
-Shapeless lenses for the brave. Boilerplate-free type-unsafe lenses for those who know what they're doing.
+[Shapeless](https://github.com/milessabin/shapeless) lenses for the brave. Boilerplate-free partially type-unsafe optics for those who know what they're doing.
