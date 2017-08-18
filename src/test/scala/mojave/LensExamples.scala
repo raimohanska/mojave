@@ -3,7 +3,7 @@ package mojave
 import shapeless.Lens
 
 object LensExamples extends App {
-  import Optics._
+  import mojave._
   trait ThingieLike
   case class Thingie(x: String, y: Int) extends ThingieLike
   case class Stub() extends ThingieLike

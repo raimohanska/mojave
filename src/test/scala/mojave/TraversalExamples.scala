@@ -1,20 +1,16 @@
 package mojave
 
 object TraversalExamples extends App {
-  import Optics._
-  trait ThingieLike
-  case class Thingie(x: String, y: Int) extends ThingieLike
-  case class Stub() extends ThingieLike
-  case class ThingieContainer(things: List[ThingieLike], id: Int)
+  import mojave._
+  import Examples._
 
-  private val wrapper = ThingieContainer(List(Thingie("x", 1), Thingie("y", 2), Stub()), 0)
+  private val wrapper = Zoo(List(Giraffe("giraffe", 1), Pony("pony", 2), Insect()), 0)
 
-  private val compositeLens: Traversal[ThingieContainer, String] = (traversal[ThingieContainer])
-    .field[List[ThingieLike]]("things")
+  private val compositeLens: Traversal[Zoo, String] = (traversal[Zoo])
+    .field[List[Animal]]("animals")
     .items
-    .ifInstanceOf[Thingie]
-    .field[String]("x")
+    .ifInstanceOf[AnimalWithName]
+    .field[String]("name")
 
-  println(compositeLens.modify(wrapper)(x => "hello " + x))
+  println(compositeLens.modify(wrapper)(x => "great " + x))
 }
-
