@@ -4,6 +4,8 @@
 
 [Shapeless](https://github.com/milessabin/shapeless) lenses for the brave. Boilerplate-light partially type-unsafe optics for those who know what they're doing.
 
+Works with scala 2.12
+
 ## Type-unsafe lenses
 
 Mojave takes [Shapeless](https://github.com/milessabin/shapeless) lenses and adds a type-unsafe way for accessing
@@ -47,3 +49,34 @@ With traversals you can change multiple items within an arbitrary data structure
 
   println(compositeLens.modify(wrapper)(x => "great " + x))
 ```
+
+## SBT
+
+```
+    resolvers += "jitpack" at "https://jitpack.io",
+    libraryDependencies += "com.github.raimohanska" % "mojave" % "0.1"
+```
+
+## Maven
+
+```
+...
+    <dependency>
+      <groupId>com.github.raimohanska</groupId>
+      <artifactId>mojave</artifactId>
+      <version>0.1</version>
+    </dependency>
+...
+
+  <repositories>
+    <repository>
+      <id>central</id>
+      <url>http://repo1.maven.org/maven2</url>
+    </repository>
+    <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
+    </repository>
+  </repositories>
+```
+
