@@ -4,18 +4,19 @@ import shapeless.Lens
 
 object LensExamples extends App {
   import mojave._
-  trait ThingieLike
-  case class Thingie(x: String, y: Int) extends ThingieLike
-  case class Stub() extends ThingieLike
-  case class ThingieContainer(thing: ThingieLike, id: Int)
 
-  private val wrapper = ThingieContainer(Thingie("x", 1), 0)
+  trait Tag
+  case class Html(content: Tag)
+  case class Body(content: String) extends Tag
+  case class Head(content: String) extends Tag
 
-  private val compositeLens: Lens[ThingieContainer, Option[String]] = (lens[ThingieContainer])
-    .field[ThingieLike]("thing")
-    .ifInstanceOf[Thingie]
-    .optField[String]("x")
+  private val wrapper = Html(Body("hello world"))
 
-  println(compositeLens.set(wrapper)(Some("y")))
+  private val compositeLens: Lens[Html, Option[String]] = (lens[Html])
+    .field[Tag]("content")
+    .ifInstanceOf[Body]
+    .optField[String]("content")
+
+  println(compositeLens.set(wrapper)(Some("hallo welt")))
 }
 
