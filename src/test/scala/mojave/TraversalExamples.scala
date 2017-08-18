@@ -13,13 +13,13 @@ object TraversalExamples extends App {
   case class Zoo(animals: List[Animal], id: Int)
 
 
-  private val wrapper = Zoo(List(Giraffe("giraffe", 1), Pony("pony", 2), Insect()), 0)
+  private val zoo = Zoo(List(Giraffe("giraffe", 1), Pony("pony", 2), Insect()), 0)
 
-  private val compositeLens: Traversal[Zoo, String] = (traversal[Zoo])
+  private val nameLens: Traversal[Zoo, String] = (traversal[Zoo])
     .field[List[Animal]]("animals")
     .items
     .ifInstanceOf[AnimalWithName]
     .field[String]("name")
 
-  println(compositeLens.modify(wrapper)(x => "great " + x))
+  println(nameLens.modify(zoo)(x => "the " + x))
 }

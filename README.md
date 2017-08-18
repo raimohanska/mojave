@@ -37,17 +37,26 @@ With traversals you can change multiple items within an arbitrary data structure
 
 ```scala
   import mojave._
-  import Examples._
 
-  private val wrapper = Zoo(List(Giraffe("giraffe", 1), Pony("pony", 2), Insect()), 0)
+  trait Animal
+  trait AnimalWithName extends Animal {
+    def name: String
+  }
+  case class Giraffe(name: String, age: Int) extends AnimalWithName
+  case class Pony(name: String, age: Int) extends AnimalWithName
+  case class Insect() extends Animal
+  case class Zoo(animals: List[Animal], id: Int)
 
-  private val compositeLens: Traversal[Zoo, String] = (traversal[Zoo])
+
+  private val zoo = Zoo(List(Giraffe("giraffe", 1), Pony("pony", 2), Insect()), 0)
+
+  private val nameLens: Traversal[Zoo, String] = (traversal[Zoo])
     .field[List[Animal]]("animals")
     .items
     .ifInstanceOf[AnimalWithName]
     .field[String]("name")
 
-  println(compositeLens.modify(wrapper)(x => "great " + x))
+  println(nameLens.modify(zoo)(x => "the " + x))
 ```
 
 ## SBT

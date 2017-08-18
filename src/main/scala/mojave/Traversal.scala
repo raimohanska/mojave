@@ -19,9 +19,13 @@ trait Traversal[S, A] {
     list
   }
 
-  def filter(predicate: A => Boolean) = new Traversal[S, A] {
+  def filter(predicate: A => Boolean) = {
     val self = this
-    override def modify(s: S)(f: (A) => A): S = self.modify(s) { a: A => if (predicate(a)) { f(a) } else { a }}
+    new Traversal[S, A] {
+      override def modify(s: S)(f: (A) => A): S = {
+        self.modify(s) { a: A => if (predicate(a)) { f(a) } else { a }}
+      }
+    }
   }
 
   def ifInstanceOf[SubTyep <: A](implicit mf: ClassManifest[SubTyep]): Traversal[S, SubTyep] = ClassSelectiveTraversal[A, SubTyep](mf.runtimeClass.asInstanceOf[Class[SubTyep]]).compose(this)

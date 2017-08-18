@@ -18,23 +18,24 @@ protected[mojave] object CaseClassFieldAccessor {
   def setField[R : ClassTag](obj: R, paramName: String, paramValue: Any): R = {
     val instanceMirror = mirror.reflect(obj)
     val decl = instanceMirror.symbol.asType.toType
-    val members = decl.members.map(method => transformMethod(method, paramName, paramValue, instanceMirror)).filter {
-      case _: Empty => false
-      case _ => true
+    var found = false
+
+    val parametersForCopyMethod = decl.members.filter(_.asTerm.isAccessor).map { method: Symbol =>
+      if (method.asTerm.name.toString == paramName) {
+        found = true
+        paramValue
+      } else {
+        instanceMirror.reflectField(method.asTerm).get
+      }
     }.toArray.reverse
+
+    if (!found) {
+      throw new NoSuchMethodException(s"Method $paramName not found in $obj")
+    }
 
     val copyMethod = decl.decl(TermName("copy")).asMethod
     val copyMethodInstance = instanceMirror.reflectMethod(copyMethod)
 
-    copyMethodInstance(members: _*).asInstanceOf[R]
-  }
-
-  private def transformMethod(method: Symbol, paramName: String, paramValue: Any, instanceMirror: InstanceMirror) = {
-    val term = method.asTerm
-    if (term.isAccessor) {
-      if (term.name.toString == paramName) {
-        paramValue
-      } else instanceMirror.reflectField(term).get
-    } else new Empty
+    copyMethodInstance(parametersForCopyMethod: _*).asInstanceOf[R]
   }
 }

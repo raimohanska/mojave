@@ -9,6 +9,7 @@ lazy val root = (project in file("."))
     version := "0.1",
     libraryDependencies ++= Seq(
       "com.chuusai" %% "shapeless" % "2.3.2",
-      "org.scala-lang" % "scala-reflect" % scalaVersion.value
+      "org.scala-lang" % "scala-reflect" % scalaVersion.value,
+      "org.scalatest" %% "scalatest" % "3.0.1" % "test"
     )
   )
