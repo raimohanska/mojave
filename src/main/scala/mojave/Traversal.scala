@@ -36,12 +36,16 @@ case class IdTraversal[A]() extends Traversal[A, A] {
   override def toIterable(s: A): Iterable[A] = List(s)
 }
 
-case class ListTraversal[A, B](traversal: Traversal[A, List[B]]) {
-  def items: Traversal[A, B] = ListItemsTraversal(traversal)
+case class ListTraversal[A, B, C[B] <: Iterable[B]](traversal: Traversal[A, C[B]]) {
+  def items: Traversal[A, B] = new Traversal[A, B] {
+    def modify(s: A)(f: (B) => B): A = traversal.modify(s){ items: C[B] => items.map(f).asInstanceOf[C[B]] }
+  }
 }
 
-case class ListItemsTraversal[A, B](traversal: Traversal[A, List[B]]) extends Traversal[A, B] {
-  def modify(s: A)(f: (B) => B): A = traversal.modify(s){ items => items.map(f) }
+case class OptionTraversal[A, B](traversal: Traversal[A, Option[B]]) {
+  def items: Traversal[A, B] = new Traversal[A, B] {
+    def modify(s: A)(f: (B) => B): A = traversal.modify(s){ items => items.map(f) }
+  }
 }
 
 case class LensTraversal[A, B](lens: Lens[A, B]) extends Traversal[A, B] {

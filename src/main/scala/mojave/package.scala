@@ -10,5 +10,6 @@ package object mojave {
   implicit def toUnsafeLens[A, B : ClassTag](l: Lens[A, B]) = UnsafeLens(l)
   implicit def toTraversableLens[A, B : ClassTag](l: Lens[A, B]) = TraversableLens(l)
   implicit def toUnsafeTraversal[A, B: ClassTag](t: Traversal[A, B]) = UnsafeTraversal(t)
-  implicit def toListTraversal[A, B](t: Traversal[A, List[B]]) = ListTraversal(t)
+  implicit def toListTraversal[A, B, C[B] <: Iterable[B]](t: Traversal[A, C[B]]) = ListTraversal(t)
+  implicit def toOptionTraversal[A, B](t: Traversal[A, Option[B]]) = OptionTraversal(t)
 }
