@@ -16,12 +16,11 @@ case class MacroTraversal[A, B: ClassTag](traversal: Traversal[A, B]) {
 class OpticMacros(val c: Context) {
   import c.universe._
 
-  private def objectFieldLensMacro[B: c.WeakTypeTag, C: c.WeakTypeTag](field: c.Expr[String], ev: c.Expr[ClassTag[B]]): c.Expr[Lens[B, C]] = {
-    val methodname = field.tree.toString.replaceAll("\"", "") // TODO: this is not nice
-    reify {
+  private def objectFieldLensMacro[B: c.WeakTypeTag, C: c.WeakTypeTag](field: c.Expr[String], ev: c.Expr[ClassTag[B]]): c.Expr[Lens[B, C]] = field.tree match {
+    case Literal(Constant(methodName: String)) => reify {
       implicit val e: ClassTag[B] = ev.splice
       new Lens[B, C] {
-        override def get(s: B) = c.Expr[C](Select(Ident(TermName("s")), TermName(methodname))).splice
+        override def get(s: B) = c.Expr[C](Select(Ident(TermName("s")), TermName(methodName))).splice
 
         override def set(s: B)(a: C) = CaseClassFieldAccessor.setField[B](s, field.splice, a)
       }
