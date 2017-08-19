@@ -1,5 +1,7 @@
 package mojave
 
+import scala.reflect.runtime.universe
+
 protected[mojave] object CaseClassFieldAccessor {
   import reflect._
   import scala.reflect.runtime._

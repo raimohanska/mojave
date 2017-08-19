@@ -6,11 +6,6 @@ import scala.reflect.ClassTag
 
 case class UnsafeLens[A, B : ClassTag](lens: Lens[A, B]) {
   /**
-    * Type-unsafe field accessor for case classes
-    */
-  def field [C](fieldName: String) = TypeUnsafeObjectFieldLens[B, C](fieldName).compose(lens)
-
-  /**
     * Field by name, where the non-existence of accessor in object is handled: get(None)=None
     */
   def fieldIfExists[C](field: String): Lens[A, Option[C]] = FieldIfExistsLens[B, C](field).compose(lens)

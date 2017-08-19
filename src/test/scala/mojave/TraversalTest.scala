@@ -4,7 +4,7 @@ import org.scalatest.{FreeSpec, Matchers}
 
 class TraversalTest extends FreeSpec with Matchers {
   val initial = Zoo(List(Giraffe("giraffe", 1), Pony("pony", 2), Insect(false)), 0)
-  val animalsLens = traversal[Zoo].field[List[Animal]]("animals").items
+  val animalsTraversal = traversal[Zoo].field[List[Animal]]("animals").items
 
   "Traversal" - {
     "list items" in {
@@ -18,7 +18,7 @@ class TraversalTest extends FreeSpec with Matchers {
     }
 
     "zoo example" in {
-      val nameLens: Traversal[Zoo, String] = animalsLens
+      val nameLens: Traversal[Zoo, String] = animalsTraversal
         .ifInstanceOf[AnimalWithName]
         .field[String]("name")
 
@@ -27,8 +27,8 @@ class TraversalTest extends FreeSpec with Matchers {
 
     "filtering" in {
       println(0)
-      val flipped = animalsLens.filter(_.isInstanceOf[Insect]).field[Boolean]("hasWings").modify(initial)(!_)
-      flipped should equal(Zoo(List(Giraffe("giraffe", 1), Pony("pony", 2), Insect(true)), 0))
+      val flipped = animalsTraversal.ifInstanceOf[AnimalWithName].filter(_.name == "giraffe").field[String]("name").modify(initial){_ => "horse"}
+      flipped should equal(Zoo(List(Giraffe("horse", 1), Pony("pony", 2), Insect(false)), 0))
     }
   }
 

@@ -13,15 +13,6 @@ class LensTest extends FreeSpec with Matchers {
       contentLens.set(document)(Head("hello")) should equal(Html(Head("hello")))
     }
 
-    "when field doesn't exist" in {
-      assertThrows[NoSuchMethodException] {
-        lens[Html].field[Tag]("content_").set(document)(Body("content"))
-      }
-      assertThrows[NoSuchMethodException] {
-        lens[Html].field[Tag]("content_").get(document)
-      }
-    }
-
     "partial lens field access" in {
       val partialLens: Lens[Html, Option[String]] = lens[Html].field[Tag]("content").ifInstanceOf[Body].optField[String]("content")
       partialLens.get(document) should equal (Some("content"))

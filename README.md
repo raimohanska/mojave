@@ -8,9 +8,13 @@ Works with scala 2.12
 
 ## Type-unsafe lenses
 
-Mojave takes [Shapeless](https://github.com/milessabin/shapeless) lenses and adds a type-unsafe way for accessing
+Mojave takes [Shapeless](https://github.com/milessabin/shapeless) lenses and adds a partially type-unsafe way for accessing
 case class fields. This is useful in cases where you have a polymorphic data model where you have multiple case classes
 implementing the same trait.
+
+By partial type-unsafety I mean that read access to fields is type safe (it's implemented using macros) but
+write access is unsafe because it relies on the assumption that there is a corresponding `copy` method in the
+implementing case class. Anyway, it works as long as all of your fields are defined as regular case class fields.
 
 ```scala
   import mojave._
@@ -63,7 +67,7 @@ With traversals you can change multiple items within an arbitrary data structure
 
 ```
     resolvers += "jitpack" at "https://jitpack.io",
-    libraryDependencies += "com.github.raimohanska" % "mojave" % "0.3"
+    libraryDependencies += "com.github.raimohanska" % "mojave" % "0.4"
 ```
 
 ## Maven
@@ -73,7 +77,7 @@ With traversals you can change multiple items within an arbitrary data structure
     <dependency>
       <groupId>com.github.raimohanska</groupId>
       <artifactId>mojave</artifactId>
-      <version>0.3</version>
+      <version>0.4</version>
     </dependency>
 ...
 
