@@ -27,7 +27,6 @@ class TraversalTest extends FreeSpec with Matchers {
         nameLens.modify(initial)(name => "the " + name) should equal(Zoo(List(Giraffe("the giraffe", 1), Pony("the pony", 2), Insect(false)), 0))
       }
       "toIterable" in {
-        // TODO: correct ordering
         nameLens.toIterable(initial).toList should equal(List("giraffe", "pony"))
       }
 
