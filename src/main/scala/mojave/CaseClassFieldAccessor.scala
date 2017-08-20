@@ -32,7 +32,7 @@ protected[mojave] object CaseClassFieldAccessor {
     }.toArray.reverse
 
     if (!found) {
-      throw new NoSuchMethodException(s"Method $paramName not found in $obj")
+      throw new NoSuchMethodException(s"Class ${obj.getClass.getName} is not a case class with member $paramName")
     }
 
     val copyMethod = decl.decl(TermName("copy")).asMethod
