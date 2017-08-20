@@ -14,7 +14,8 @@ implementing the same trait.
 
 By partial type-unsafety I mean that read access to fields is type safe (it's implemented using macros) but
 write access is unsafe because it relies on the assumption that there is a corresponding `copy` method in the
-implementing case class. Anyway, it works as long as all of your fields are defined as regular case class fields.
+implementing case class, to be called using reflection. Anyway, it works as long as all of your fields are 
+defined as regular case class fields.
 
 ```scala
   import mojave._
