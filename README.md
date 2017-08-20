@@ -67,7 +67,7 @@ With traversals you can change multiple items within an arbitrary data structure
 
 ```
     resolvers += "jitpack" at "https://jitpack.io",
-    libraryDependencies += "com.github.raimohanska" % "mojave" % "0.4"
+    libraryDependencies += "com.github.raimohanska" % "mojave" % "0.4.1"
 ```
 
 ## Maven
@@ -77,7 +77,7 @@ With traversals you can change multiple items within an arbitrary data structure
     <dependency>
       <groupId>com.github.raimohanska</groupId>
       <artifactId>mojave</artifactId>
-      <version>0.4</version>
+      <version>0.4.1</version>
     </dependency>
 ...
 
