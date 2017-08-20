@@ -7,27 +7,38 @@ class TraversalTest extends FreeSpec with Matchers {
   val animalsTraversal = traversal[Zoo].field[List[Animal]]("animals").items
 
   "Traversal" - {
-    "list items" in {
-      traversal[List[Int]].items.modify(List(1))(_ * 2) should equal(List(2))
-    }
-    "set items" in {
-      traversal[Set[Int]].items.modify(Set(1))(_ * 2) should equal(Set(2))
-    }
-    "option items" in {
-      traversal[Option[Int]].items.modify(Some(1))(_ * 2) should equal(Some(2))
+    "Collection / Option access" - {
+      "list items" in {
+        traversal[List[Int]].items.modify(List(1))(_ * 2) should equal(List(2))
+      }
+      "set items" in {
+        traversal[Set[Int]].items.modify(Set(1))(_ * 2) should equal(Set(2))
+      }
+      "option items" in {
+        traversal[Option[Int]].items.modify(Some(1))(_ * 2) should equal(Some(2))
+      }
     }
 
-    "zoo example" in {
+    "Zoo example" - {
       val nameLens: Traversal[Zoo, String] = animalsTraversal
         .ifInstanceOf[AnimalWithName]
         .field[String]("name")
+      "modify" in {
+        nameLens.modify(initial)(name => "the " + name) should equal(Zoo(List(Giraffe("the giraffe", 1), Pony("the pony", 2), Insect(false)), 0))
+      }
+      "toIterable" in {
+        // TODO: correct ordering
+        nameLens.toIterable(initial).toList should equal(List("giraffe", "pony"))
+      }
 
-      nameLens.modify(initial)(name => "the " + name) should equal(Zoo(List(Giraffe("the giraffe", 1), Pony("the pony", 2), Insect(false)), 0))
     }
 
-    "filtering" in {
-      println(0)
-      val flipped = animalsTraversal.ifInstanceOf[AnimalWithName].filter(_.name == "giraffe").field[String]("name").modify(initial){_ => "horse"}
+    "Filtering" in {
+      val flipped = animalsTraversal
+        .ifInstanceOf[AnimalWithName]
+        .filter(_.name == "giraffe")
+        .field[String]("name")
+        .modify(initial){_ => "horse"}
       flipped should equal(Zoo(List(Giraffe("horse", 1), Pony("pony", 2), Insect(false)), 0))
     }
   }

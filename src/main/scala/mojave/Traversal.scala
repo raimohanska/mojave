@@ -15,7 +15,10 @@ trait Traversal[S, A] {
   // Default implementation of toIterable implemented using modify
   def toIterable(s: S): Iterable[A] = {
     var list: List[A] = Nil
-    modify(s) { item => list +:= item; item }
+    modify(s) { item =>
+      list ++= List(item)
+      item
+    }
     list
   }
 
