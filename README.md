@@ -35,6 +35,19 @@ defined as regular case class fields.
   println(compositeLens.set(wrapper)(Some("hallo welt")))
 ```
 
+In short, the `Lens` API consists of
+
+- `get(object)` gets value of focused element
+- `set(object)(newValue)` sets new value of focused element
+- `modify(object)(currentValue => newValue)` modifies focused element with given function
+- `field[Type](name)` returns new lens that focuses on a field
+
+For lenses that focus on `Option[_]` there is also
+
+- `optField[Type](name)` focuses on a field inside an option
+
+Note that `Lens` type is defined in Shapeless. Mojave just adds some convenience methods there.
+
 ## Traversals
 
 In addition, Mojave introduces `Traversals` that allow you to focus on multiple items (whereas lenses always focus on a single item).
@@ -63,6 +76,17 @@ With traversals you can change multiple items within an arbitrary data structure
 
   println(nameLens.modify(zoo)(x => "the " + x))
 ```
+
+In short, the `Traversal` API consists of
+
+- `modify(object)(currentValue => newValue)` modifies focused elements with given function
+- `set(object)(newValue)` sets new value of all focused elements
+- `toIterable(object)` returns focused elements as `Iterable`
+- `field[Type](name)` returns new traversal that focuses on a field
+
+For traversals that focus on `Option[_]` or `Iterable[_]` there is also
+
+- `items(name)` focuses on the items of the currently focused `Option` or `Iterable`
 
 ## SBT
 
