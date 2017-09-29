@@ -5,6 +5,8 @@ import shapeless.{Lens, MkFieldLens, Witness}
 trait Traversal[S, A] {
   def modify(s: S)(f: A => A): S
 
+  def set(s: S)(x: A) = modify(s)(Function.const(x))
+
   def compose[T](g: Traversal[T, S]) = {
     val self = this
     new Traversal[T, A] {

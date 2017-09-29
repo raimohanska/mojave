@@ -19,6 +19,10 @@ class TraversalTest extends FreeSpec with Matchers {
       }
     }
 
+    "Traversat.set" in {
+      traversal[List[Int]].items.set(List(1))(0) should equal(List(0))
+    }
+
     "Zoo example" - {
       val nameLens: Traversal[Zoo, String] = animalsTraversal
         .ifInstanceOf[AnimalWithName]
