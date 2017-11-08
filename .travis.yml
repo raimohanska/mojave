@@ -2,3 +2,5 @@ language: scala
 branches:
   only:
   - master
+scala:
+  - 2.12.1
