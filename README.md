@@ -2,6 +2,8 @@
 
 # Mojave
 
+[![Build Status](https://travis-ci.org/raimohanska/mojave.svg?branch=master)](https://travis-ci.org/raimohanska/mojave)
+
 [Shapeless](https://github.com/milessabin/shapeless) lenses for the brave. Boilerplate-light partially type-unsafe optics for those who know what they're doing.
 
 Works with scala 2.12
