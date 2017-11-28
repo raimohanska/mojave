@@ -23,6 +23,22 @@ class TraversalTest extends FreeSpec with Matchers {
       traversal[List[Int]].items.set(List(1))(0) should equal(List(0))
     }
 
+    "Compose" in {
+      val id = traversal[Int]
+      val items = traversal[List[Int]].items
+
+      id.compose(items)
+    }
+
+    "Concat" in {
+      val a: Traversal[TwoLists, Int] = traversal[TwoLists].field[List[Int]]("a").items
+      val b: Traversal[TwoLists, Int] = traversal[TwoLists].field[List[Int]]("b").items
+
+      val both = a ++ b
+
+      both.modify(TwoLists(List(1), List(2)))(_ + 1) should equal(TwoLists(List(2), List(3)))
+    }
+
     "Zoo example" - {
       val nameLens: Traversal[Zoo, String] = animalsTraversal
         .ifInstanceOf[AnimalWithName]
@@ -33,7 +49,6 @@ class TraversalTest extends FreeSpec with Matchers {
       "toIterable" in {
         nameLens.toIterable(initial).toList should equal(List("giraffe", "pony"))
       }
-
     }
 
     "Filtering" in {
@@ -54,5 +69,5 @@ class TraversalTest extends FreeSpec with Matchers {
   case class Pony(name: String, age: Int) extends AnimalWithName
   case class Insect(hasWings: Boolean) extends Animal
   case class Zoo(animals: List[Animal], id: Int)
-
+  case class TwoLists(a: List[Int], b: List[Int])
 }

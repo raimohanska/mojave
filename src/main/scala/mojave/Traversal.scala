@@ -1,6 +1,6 @@
 package mojave
 
-import shapeless.{Lens, MkFieldLens, Witness}
+import shapeless.Lens
 
 trait Traversal[S, A] {
   def modify(s: S)(f: A => A): S
@@ -37,6 +37,8 @@ trait Traversal[S, A] {
   }
 
   def ifInstanceOf[SubTyep <: A](implicit mf: ClassManifest[SubTyep]): Traversal[S, SubTyep] = ClassSelectiveTraversal[A, SubTyep](mf.runtimeClass.asInstanceOf[Class[SubTyep]]).compose(this)
+
+  def ++(other: Traversal[S, A]) = ConcatTraversal(List(this, other))
 }
 
 case class IdTraversal[A]() extends Traversal[A, A] {
@@ -62,6 +64,10 @@ case class OptionTraversal[A, B](traversal: Traversal[A, Option[B]]) {
 case class LensTraversal[A, B](lens: Lens[A, B]) extends Traversal[A, B] {
   override def toIterable(s: A): Iterable[B] = List(lens.get(s))
   def modify(s: A)(f: (B) => B): A = lens.modify(s)(f)
+}
+
+case class ConcatTraversal[A, B](traversals: List[Traversal[A, B]]) extends Traversal[A, B] {
+  override def modify(s: A)(f: (B) => B): A = traversals.foldLeft(s) { case (state, t) => t.modify(state)(f) }
 }
 
 private case class ClassSelectiveTraversal[Tyep, SubTyep <: Tyep](subTypeClass: Class[SubTyep]) extends Traversal[Tyep, SubTyep] {
